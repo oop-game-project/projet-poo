@@ -36,7 +36,7 @@ public abstract class Unit {
         this.positionY = y;
     }
 
-    public void takeDamage(int attackPower) {
+    public void takenDamage(int attackPower) {
         int realDamage = attackPower - defense;
         if (realDamage < 0) {
             realDamage = 0 ;
@@ -46,5 +46,54 @@ public abstract class Unit {
         }
     }
 
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAttackPower() {
+        return attackPower;
+    }
+
+    public void setAttackPower(int attackPower) {
+        this.attackPower = attackPower;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public int getPositionX() {
+        return positionX;
+    }
+
+    public void setPositionX(int positionX) {
+        this.positionX = positionX;
+    }
+
+    public int getPositionY() {
+        return positionY;
+    }
+
+    public void setPositionY(int positionY) {
+        this.positionY = positionY;
+    }
+
+    
 
 }
