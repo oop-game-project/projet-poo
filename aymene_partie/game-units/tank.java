@@ -1,5 +1,7 @@
 package game.units;
 
+import game.units.Unit;
+
 public class Tank extends Unit {
 
     private int range = 2;

@@ -1,4 +1,5 @@
 package game.units;
+import game.units.Unit;
 
 public class Archer extends Unit {
 
