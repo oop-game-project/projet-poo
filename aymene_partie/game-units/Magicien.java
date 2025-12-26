@@ -1,15 +1,15 @@
 package game.units;
 
-public class Archer extends Unit {
+public class Magicien extends Unit {
 
     private int range = 3;
 
-    public Archer(int positionX, int positionY) {
-        super(100, "Archer", "Arc", 15, 5, positionX, positionY);
+    public Magicien(int x, int y) {
+        super(100, "Magicien", "baguette magique", 20, 20, x, y);
     }
 
     public String getType() {
-        return "Archer";
+        return "Magicien";
     }
 
     public void attack(Unit target) {
@@ -22,5 +22,4 @@ public class Archer extends Unit {
         int distance = Math.abs(this.positionX - target.positionX) + Math.abs(this.positionY - target.positionY);
         return distance <= range;
     }
-
 }
