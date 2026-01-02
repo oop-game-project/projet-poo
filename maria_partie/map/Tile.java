@@ -20,13 +20,13 @@ public class Tile {
     public boolean isWalkable() { return walkable; }
     public int getDefenseBonus() { return defenseBonus; }
 
-    // 
-    public char toSymbol() {
+    
+    public String toSymbol() {
         return switch (type) {
-            case GRASS -> 'G';
-            case WATER -> 'W';
-            case MOUNTAIN -> 'M';
-        };
+           case GRASS -> "🍀";
+        case WATER -> "🌊";
+        case MOUNTAIN -> "⛰️";  
+        }
     }
     public int getDefenseBonus1() {
         switch (type) {
