@@ -24,13 +24,13 @@ C’est la base de tout.
 
 - attack
 
-- defense   
+- defense
 
 - range
 
 - cost
 
-- position (x, y)   
+- position (x, y)
 
 **Méthodes :**
 
@@ -68,7 +68,6 @@ Exemple :
 
 degats = attaque_attquant - défense_cible + aléatoire
 
-
 Utilise Random
 
 Empêche les dégâts négatifs
@@ -80,7 +79,6 @@ Mets à jour les points de vie
 Quand :
 
 hp <= 0
-
 
 Alors :
 

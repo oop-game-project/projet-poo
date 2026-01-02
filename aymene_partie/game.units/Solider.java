@@ -1,14 +1,13 @@
 package game.units;
-import game.units.Unit;
 
-public class Cavalier extends Unit {
+public class Solider extends Unit {
 
-    public Cavalier(int positionX, int positionY) {
-        super(100, "Cavalier", "Épée", 25, 15, positionX, positionY);
+    public Solider(int positionX, int positionY) {
+        super(100, "Soldier", "Pistolet", 20, 10, positionX, positionY);
     }
 
     public String getType() {
-        return "Cavalier";
+        return "Soldier";
     }
 
     public void attack(Unit target) {

@@ -10,7 +10,7 @@ public abstract class Unit {
     protected int positionY;
     protected String arme_name;
 
-    public Unit(int health, String name, String arme_name,int attackPower, int defense, int positionX, int positionY) {
+    public Unit(int health, String name, String arme_name, int attackPower, int defense, int positionX, int positionY) {
         this.health = health;
         this.name = name;
         this.arme_name = arme_name;
@@ -55,12 +55,10 @@ public abstract class Unit {
     public abstract String getType();
 
     public void affichage() {
-    System.out.println("Type: " + getType());
-    System.out.println("Arme: " + arme_name);
-    System.out.println("Health: " + health);
-}
-
-
+        System.out.println("Type: " + getType());
+        System.out.println("Arme: " + arme_name);
+        System.out.println("Health: " + health);
+    }
 
     // Getters and Setters
     public int getHealth() {
@@ -82,6 +80,7 @@ public abstract class Unit {
     public String getArme_name() {
         return arme_name;
     }
+
     public void setArme_name(String arme_name) {
         this.arme_name = arme_name;
     }
