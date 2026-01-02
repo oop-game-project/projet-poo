@@ -87,7 +87,7 @@ public class GameMap {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (x == playerPos.x && y == playerPos.y) {
-                    System.out.print("P ");
+                    System.out.print("👤");
                 } else {
                     System.out.print(grid[y][x].toSymbol() + " ");
                 }
