@@ -1,11 +1,11 @@
-package game.units;
+package units;
 
 public class Tank extends Unit {
 
     private int range = 2;
 
     public Tank(int positionX, int positionY) {
-        super(100, "tank", "Canon", 30, 10, positionX, positionY);
+        super(100, "tank", "Canon", 30, 10, positionX, positionY, 2);
     }
 
     public String getType() {

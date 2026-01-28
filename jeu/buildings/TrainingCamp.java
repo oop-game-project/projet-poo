@@ -1,4 +1,4 @@
-package game.buildings;
+package buildings;
 
 import java.util.HashMap;
 

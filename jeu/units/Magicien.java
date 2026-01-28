@@ -1,11 +1,9 @@
-package game.units;
+package units;
 
 public class Magicien extends Unit {
 
-    private int range = 3;
-
     public Magicien(int x, int y) {
-        super(100, "Magicien", "baguette magique", 20, 20, x, y);
+        super(100, "Magicien", "baguette magique", 20, 20, x, y, 3);
     }
 
     public String getType() {
@@ -23,3 +21,5 @@ public class Magicien extends Unit {
         return distance <= range;
     }
 }
+
+

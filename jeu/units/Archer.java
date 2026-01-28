@@ -1,11 +1,9 @@
-package game.units;
+package units;
 
 public class Archer extends Unit {
 
-    private int range = 3;
-
     public Archer(int positionX, int positionY) {
-        super(100, "Archer", "Arc", 15, 5, positionX, positionY);
+        super(100, "Archer", "Arc", 15, 5, positionX, positionY, 3);
     }
 
     public String getType() {

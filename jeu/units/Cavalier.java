@@ -1,9 +1,9 @@
-package game.units;
+package units;
 
 public class Cavalier extends Unit {
 
     public Cavalier(int positionX, int positionY) {
-        super(100, "Cavalier", "Épée", 25, 15, positionX, positionY);
+        super(100, "Cavalier", "Épée", 25, 15, positionX, positionY, 1);
     }
 
     public String getType() {

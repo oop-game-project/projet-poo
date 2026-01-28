@@ -1,19 +1,20 @@
-package game.units;
+package units;
 
 public abstract class Unit {
-
-    protected int health;
+	protected int health;
     protected String name;
     protected int attackPower;
     protected int defense;
     protected int positionX;
     protected int positionY;
     protected String arme_name;
+    protected int range;
 
-    public Unit(int health, String name, String arme_name, int attackPower, int defense, int positionX, int positionY) {
+    public Unit(int health, String name, String arme_name, int attackPower, int defense, int positionX, int positionY, int range) {
         this.health = health;
         this.name = name;
         this.arme_name = arme_name;
+        this.range = range;
         this.attackPower = attackPower;
         this.defense = defense;
         this.positionX = positionX;
@@ -25,6 +26,7 @@ public abstract class Unit {
         this.name = "unknown";
         this.arme_name = "unknown";
         this.attackPower = 0;
+        this.range = 0;
         this.defense = 0;
         this.positionX = 0;
         this.positionY = 0;
@@ -116,5 +118,6 @@ public abstract class Unit {
     public void setPositionY(int positionY) {
         this.positionY = positionY;
     }
+
 
 }

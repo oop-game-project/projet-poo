@@ -1,9 +1,9 @@
-package game.units;
+package units;
 
 public class Soldier extends Unit {
 
     public Soldier(int positionX, int positionY) {
-        super(100, "Soldier", "Pistolet", 20, 10, positionX, positionY);
+        super(100, "Soldier", "Pistolet", 20, 10, positionX, positionY, 1);
     }
 
     public String getType() {
@@ -16,3 +16,4 @@ public class Soldier extends Unit {
         }
     }
 }
+

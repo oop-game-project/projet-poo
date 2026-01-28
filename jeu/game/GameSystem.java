@@ -2,129 +2,169 @@ package game;
 
 import map.GameMap;
 import map.Position;
-import game.units.Unit;
-import game.units.Solider;
-import game.units.Archer;
-import game.units.Tank;
-import game.units.Magicien;
-import game.units.Cavalier;
-import game.buildings.Building;
-import game.player.Player;
+import units.Unit;
+import player.Player;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class GameSystem {
 
-    private GameMap map;
-    private Player player;
-    private Position playerPos;
-    private List<Unit> units;
-    private List<Building> buildings;
-    private Scanner sc;
+    private final GameMap map;
+    private final Player player;
+    private final Unit playerUnit;
+    private final Position playerPos;
 
-    public GameSystem(int mapWidth, int mapHeight, Player player) {
-        this.map = new GameMap(mapWidth, mapHeight);
+    private final List<Unit> enemyUnits = new ArrayList<>();
+    private final Random random = new Random();
+    private final Scanner sc = new Scanner(System.in);
+
+    private boolean running = true;
+
+    public GameSystem(int width, int height, Player player, Unit playerUnit) {
+        this.map = new GameMap(width, height, true); 
         this.player = player;
+        this.playerUnit = playerUnit;
         this.playerPos = new Position(0, 0);
-        this.units = new ArrayList<>();
-        this.buildings = new ArrayList<>();
-        this.sc = new Scanner(System.in);
+        playerUnit.move(0, 0);
     }
 
-    public void addUnit(Unit unit) {
-        units.add(unit);
+
+    public void addEnemy(Unit u) {
+        placeEnemyRandomly(u);
+        enemyUnits.add(u);
     }
 
-    public void addBuilding(Building building) {
-        buildings.add(building);
+    private void placeEnemyRandomly(Unit u) {
+        int x, y;
+        do {
+            x = random.nextInt(map.getWidth());
+            y = random.nextInt(map.getHeight());
+        } while (!map.canMoveTo(x, y) || (x == 0 && y == 0));
+        u.move(x, y);
     }
 
-    private void showUnits() {
-        System.out.println("\n=== UNITÉS ===");
-        for (Unit u : units) {
-            u.affichage();
-            System.out.println("Position: (" + u.getPositionX() + "," + u.getPositionY() + ")");
-        }
-    }
 
     public void run() {
-        boolean running = true;
-
         while (running) {
-            System.out.println("\n=== MAP ===");
-            map.printWithPlayer(playerPos);
 
-            System.out.println("Position du joueur: (" + playerPos.x + "," + playerPos.y + ")");
-            System.out.println("Defense bonus: " + map.getDefenseBonusAt(playerPos.x, playerPos.y));
-            player.showResources();
+            System.out.println("\n===== MAP =====");
+            map.printWithUnits(playerPos, enemyUnits); 
 
-            System.out.println("\nCommandes: w/a/s/d = déplacement, u = utiliser bâtiment, q = quitter");
+            System.out.println("\nJoueur 👤 : (" + playerPos.x + "," + playerPos.y + ")");
+            System.out.println("Vie : " + playerUnit.getHealth());
+
+            System.out.println("\nCommandes : w/a/s/d = bouger | f = attaquer | q = quitter");
             String cmd = sc.nextLine().trim().toLowerCase();
-            if (cmd.isEmpty()) {
-                continue;
+
+            if (cmd.isEmpty()) continue;
+
+            switch (cmd.charAt(0)) {
+                case 'w' -> movePlayer(0, -1);
+                case 's' -> movePlayer(0, 1);
+                case 'a' -> movePlayer(-1, 0);
+                case 'd' -> movePlayer(1, 0);
+                case 'f' -> playerAttack();
+                case 'q' -> running = false;
+                default -> System.out.println("Commande inconnue !");
             }
 
-            char c = cmd.charAt(0);
+            enemyTurn();
+            displayAllHealth();
 
-            switch (c) {
-                case 'w' ->
-                    movePlayer(0, -1);
-                case 's' ->
-                    movePlayer(0, 1);
-                case 'a' ->
-                    movePlayer(-1, 0);
-                case 'd' ->
-                    movePlayer(1, 0);
-                case 'u' ->
-                    useBuilding();
-                case 'q' ->
-                    running = false;
-                default ->
-                    System.out.println("Commande inconnue !");
+            if (!playerUnit.isAlive()) {
+                System.out.println("💀 GAME OVER — Le joueur est mort");
+                break;
             }
-
-            showUnits();
-
-            if (isGameOver()) {
-                System.out.println("🏆 Fin du jeu !");
-                running = false;
+            if (allEnemiesDead()) {
+                System.out.println("🏆 VICTOIRE — Tous les ennemis sont morts");
+                break;
             }
         }
 
-        System.out.println("Merci d’avoir joué !");
+        System.out.println("Fin du jeu.");
     }
+
 
     private void movePlayer(int dx, int dy) {
-        if (map.move(playerPos, dx, dy)) {
-            System.out.println("Déplacement réussi !");
+        int nx = playerPos.x + dx;
+        int ny = playerPos.y + dy;
+
+        if (map.canMoveTo(nx, ny)) {
+            playerPos.x = nx;
+            playerPos.y = ny;
+            playerUnit.move(nx, ny);
         } else {
-            System.out.println("Déplacement impossible !");
+            System.out.println("⛔ Déplacement impossible !");
         }
     }
 
-    private void useBuilding() {
-        System.out.println("\n=== BÂTIMENTS ===");
-        for (int i = 0; i < buildings.size(); i++) {
-            System.out.println(i + ": " + buildings.get(i).getName());
-        }
-        System.out.print("Choisir bâtiment à utiliser: ");
-        int choice = sc.nextInt();
-        sc.nextLine();
-        if (choice >= 0 && choice < buildings.size()) {
-            buildings.get(choice).use();
-        } else {
-            System.out.println("Bâtiment inexistant !");
-        }
-    }
+    private void playerAttack() {
+        boolean attacked = false;
+        for (Unit enemy : enemyUnits) {
+            if (!enemy.isAlive()) continue;
 
-    private boolean isGameOver() {
-        int alive = 0;
-        for (Unit u : units) {
-            if (u.isAlive()) {
-                alive++;
+            int dx = Math.abs(enemy.getPositionX() - playerPos.x);
+            int dy = Math.abs(enemy.getPositionY() - playerPos.y);
+
+            if (dx + dy == 1) { 
+                System.out.println("⚔️ Attaque sur " + enemy.getClass().getSimpleName());
+                playerUnit.attack(enemy);
+                attacked = true;
             }
         }
-        return alive <= 1;
+        if (!attacked) {
+            System.out.println("❌ Aucun ennemi à portée !");
+        }
+    }
+
+
+    private void enemyTurn() {
+        for (Unit enemy : enemyUnits) {
+            if (!enemy.isAlive()) continue;
+
+            moveEnemyRandomly(enemy);
+
+            int dx = Math.abs(enemy.getPositionX() - playerPos.x);
+            int dy = Math.abs(enemy.getPositionY() - playerPos.y);
+
+            if (dx + dy == 1) {
+                System.out.println(enemy.getClass().getSimpleName() + " attaque le joueur !");
+                enemy.attack(playerUnit);
+            }
+        }
+    }
+
+    private void moveEnemyRandomly(Unit u) {
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {1, -1, 0, 0};
+
+        int dir = random.nextInt(4);
+        int nx = u.getPositionX() + dx[dir];
+        int ny = u.getPositionY() + dy[dir];
+
+        if (map.canMoveTo(nx, ny)) {
+            u.move(nx, ny);
+        }
+    }
+
+
+    private void displayAllHealth() {
+        System.out.println("\n PV des unités :");
+        System.out.println("👤 Joueur : " + playerUnit.getHealth());
+        for (Unit enemy : enemyUnits) {
+            if (enemy.isAlive()) {
+                System.out.println(enemy.getClass().getSimpleName() + " : " + enemy.getHealth());
+            }
+        }
+    }
+
+    private boolean allEnemiesDead() {
+        for (Unit u : enemyUnits) {
+            if (u.isAlive()) return false;
+        }
+        return true;
     }
 }

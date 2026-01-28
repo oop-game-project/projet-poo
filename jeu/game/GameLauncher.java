@@ -1,28 +1,42 @@
 package game;
 
-import game.buildings.*;
-import game.player.Player;
-import game.units.*;
+import player.Player;
+import units.*;
+
+import java.util.Scanner;
 
 public class GameLauncher {
- 
+
     public static void main(String[] args) {
 
-        Player player = new Player("Player 1");
-        GameSystem game = new GameSystem(6, 6, player);
+        Scanner sc = new Scanner(System.in);
 
-        game.addUnit(new Solider(0, 0));
-        game.addUnit(new Archer(1, 1));
-        game.addUnit(new Tank(2, 2));
-        game.addUnit(new Magicien(3, 3));
-        game.addUnit(new Cavalier(4, 4));
+        System.out.println("=== Choisissez votre personnage ===");
+        System.out.println("Options : Soldier | Archer | Tank | Magicien | Cavalier");
+        String choix = sc.nextLine().trim().toLowerCase();
 
-        game.addBuilding(new CommandCenter());
-        game.addBuilding(new Farm());
-        game.addBuilding(new Sawmill());
-        game.addBuilding(new Mine());
-        game.addBuilding(new TrainingCamp());
+        Unit playerUnit;
+
+        switch (choix) {
+            case "archer" -> playerUnit = new Archer(0, 0);
+            case "tank" -> playerUnit = new Tank(0, 0);
+            case "magicien" -> playerUnit = new Magicien(0, 0);
+            case "cavalier" -> playerUnit = new Cavalier(0, 0);
+            default -> playerUnit = new Soldier(0, 0);
+        }
+
+        Player player = new Player("Joueur");
+
+        GameSystem game = new GameSystem(6, 6, player, playerUnit);
+
+        game.addEnemy(new Soldier(1, 1));
+        game.addEnemy(new Archer(2, 2));
+        game.addEnemy(new Tank(3, 3));
+        game.addEnemy(new Magicien(4, 1));
+        game.addEnemy(new Cavalier(1, 4));
 
         game.run();
+
+        sc.close();
     }
 }
